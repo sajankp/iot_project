@@ -5,6 +5,7 @@ from .models import Data
 from django.utils import timezone
 from django.urls import reverse
 import json
+import datetime
 
 # Create your views here.
 @csrf_exempt
@@ -13,12 +14,15 @@ def store(request):
     value = Data(value = a,date = timezone.localtime(timezone.now()))
     value.save()
     return HttpResponse(f'Done and recieved {value.value} at {value.date}')
-    '''return HttpResponseRedirect(reverse("index"))
-    values = Data.objects.all()
-    context = {"values" : values}
-    return render(request,"esp8266/values.html",context)'''
 
 def index(request):
     values = Data.objects.all()
     context = {"values" : values}
     return render(request,"esp8266/values.html",context)
+
+def chart(request):
+    now_in_timezone = timezone.now()
+    one_hour_ago = now_in_timezone - datetime.timedelta(seconds = 60*60)
+    values = Data.objects.filter(date__range=[one_hour_ago,now_in_timezone])
+    context = {"values" : values}
+    return render(request,"esp8266/chart.html",context)

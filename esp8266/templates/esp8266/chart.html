@@ -1,0 +1,44 @@
+<html>
+<head>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['line']});
+      google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('datetime', 'Day');
+      data.addColumn('number', 'value');
+      {% if values %}
+      {% for x in values %}
+        var row =  [new Date({{x.date.timestamp}}*1000), {{x.value}}];
+        data.addRows([row]);
+      {% endfor %}
+      {% else %}
+        data.addRows([[new Date(0),0]]);
+      {% endif %}
+      var options = {
+        chart: {
+          title: 'Reading recorded in graphical format',
+          subtitle: 'in last one hour'
+        },
+        width: 1000,
+        height: 500,
+        axes: {
+          x: {
+            0: {side: 'top'}
+          }
+        }
+      };
+
+      var chart = new google.charts.Line(document.getElementById('line_top_x'));
+
+      chart.draw(data, google.charts.Line.convertOptions(options));
+    }
+  </script>
+</head>
+<body>
+  <div id="line_top_x"></div>
+</body>
+</html>
