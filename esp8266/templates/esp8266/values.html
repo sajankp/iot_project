@@ -5,14 +5,21 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <meta charset="utf-8">
     <title>My IOT</title>
+    <h3>All Recorded readings</h3>
+    <h3><a href="{% url "chart" %}">Graphical View of readings from last one hour</a></h3>
   </head>
 <body>
+
   <ol>
-{% for value in values%}
-<li>
-<pre>Reading : {{ value.value }}    {% load tz %}{% localtime on %}Time of Reading : {{ value.date }}{% endlocaltime %} </pre>
-</li>
-{% endfor %}
+    <div class="row">
+    {% for value in values%}
+      <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+      <li>
+        <pre>Value : {{ value.value }}  {% load tz %}{% localtime on %}Time : {{ value.date }}{% endlocaltime %} </pre>
+      </li>
+    </div>
+    {% endfor %}
+  </div>
   </ol>
 </body>
 </html>
