@@ -20,7 +20,7 @@
       {% endif %}
       var options = {
         chart: {
-          title: 'Reading recorded in graphical format',
+          title: 'Reading recorded',
           subtitle: 'in last one hour'
         },
         width: 1000,
@@ -40,5 +40,8 @@
 </head>
 <body>
   <div id="line_top_x"></div>
+  {% if not values %}
+  <h3>  No Readings in last hour </h3>
+  {% endif %}
 </body>
 </html>
