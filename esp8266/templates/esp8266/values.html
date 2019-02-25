@@ -11,49 +11,43 @@
 <body>
 
 {%comment%}
-
-  {% regroup values by date.month as month_list %}
-
-  <ul>
-  {% for months in month_list %}
-      <li>{{ months.grouper }}
-      <ol>
-          {% for x in months.list %}
-            <li>{{ x.date }}: {{ x.value }}</li>
-          {% endfor %}
-      </ol>
-      </li>
-  {% endfor %}
-  </ul>
-
+{% regroup values by date.month as value_list_by_month %}
+<ul type = "triangle">
+{% for months in value_list_by_month %}
+    <li>Month : {{ months.grouper }}
+    {% regroup months.list by date.day as value_list_by_day %}
+    {% for days in value_list_by_day %}
+    <ul type = "circle">
+    <li>Day : {{ days.grouper }}
+    <dl type = "i">
+    {% for x in days.list %}
+    <dt>Value : {{ x.value }}  {% load tz %}{% localtime on %}Time : {{ x.date }}{% endlocaltime %}</dt>
+    {% endfor %}
+    </dl>
+    </li>
+    {% endfor %}
+    </ul>
+    </li>
+{% endfor %}
+</ul>
 {% endcomment %}
 
-  {% regroup values by date.month as month_list %}
+
+{% regroup values by date.month as month_list %}
   <ul>
   {% for months in month_list reversed%}
       <li>{{ months.grouper }}
       <ol>
           {% for x in months.list reversed%}
-            <li>{{ x.date }}: {{ x.value }}</li>
+          <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+            <li>Value : {{ x.value }}  {% load tz %}{% localtime on %}Time : {{ x.date }}{% endlocaltime %}</li>
+          </div>
           {% endfor %}
+      <br style="clear:both;"/>
       </ol>
       </li>
   {% endfor %}
   </ul>
 
-{% comment %}
-  <ol>
-    <div class="row">
-    {% for value in values%}
-      <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
-      <li>
-        <pre>Value : {{ value.value }}  {% load tz %}{% localtime on %}Time : {{ value.date }}{% endlocaltime %} </pre>
-      </li>
-    </div>
-    {% endfor %}
-  </div>
-  </ol>
-
-{% endcomment %}
 </body>
 </html>
