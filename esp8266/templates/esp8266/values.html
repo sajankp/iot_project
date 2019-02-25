@@ -33,16 +33,13 @@
   {% for months in month_list reversed%}
       <li>{{ months.grouper }}
       <ol>
-          {% for x in months.list %}
+          {% for x in months.list reversed%}
             <li>{{ x.date }}: {{ x.value }}</li>
           {% endfor %}
       </ol>
       </li>
   {% endfor %}
   </ul>
-
-
-
 
 {% comment %}
   <ol>
