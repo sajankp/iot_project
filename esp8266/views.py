@@ -18,7 +18,7 @@ def store(request):
     return HttpResponse(f'Done and recieved {value.value} at {value.date}')
 
 def index(request):
-    values = Data.objects.all()
+    values = Data.objects.all().order_by('date')
     context = {"values" : values}
     return render(request,"esp8266/values.html",context)
 
