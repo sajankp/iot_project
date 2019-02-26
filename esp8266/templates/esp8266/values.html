@@ -4,10 +4,10 @@
   <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <meta charset="utf-8">
-    <title>My IOT</title>
-    <h3><a href="{% url "chart" %}">Graphical View of readings from last one hour</a></h3>
-    <h3><a href="{% url 'admin:index' %}">link to admin panel</a></h3>
-    <h3>    <a href="{% url "api-root" %}">Api v1</a></h3>
+    <title>My IOT website</title>
+    <h4><a href="{% url "chart" %}">Graphical View of readings from last one hour</a></h3>
+    <h4><a href="{% url 'admin:index' %}">link to admin panel</a></h3>
+    <h4><a href="{% url "api-root" %}">Api v1</a></h3>
     <h2>All Recorded readings</h2>
   </head>
 <body>
@@ -49,7 +49,7 @@
       <ol>
           {% for x in values reversed%}
           <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
-            <li>Value : {{ x.value }}  {% load tz %}{% localtime on %}Time : {{ x.date }}{% endlocaltime %}</li>
+            <li>Value : <b>{{ x.value }}</b>  {% load tz %}{% localtime on %}Time : {{ x.date|date:"dS (l) P" }}{% endlocaltime %}</li>
           </div>
           {% endfor %}
       <br style="clear:both;"/>
