@@ -14,33 +14,40 @@
 
 {%comment%}
 {% regroup values by date.month as value_list_by_month %}
-<ul type = "triangle">
+
+<ul>
 {% for months in value_list_by_month %}
-    <li>Month : {{ months.grouper }}
+
+	<li>Month : {{ months.list.0|date:"F" }}
     {% regroup months.list by date.day as value_list_by_day %}
     {% for days in value_list_by_day %}
-    <ul type = "circle">
-    <li>Day : {{ days.grouper }}
-    <dl type = "i">
+
+		<ul>
+			<li>Day : {{ days.list.0|date:"d" }}
+
+				<ol>
     {% for x in days.list %}
-    <dt>Value : {{ x.value }}  {% load tz %}{% localtime on %}Time : {{ x.date }}{% endlocaltime %}</dt>
+					<li>Value : {{ x.value }}  {% load tz %}{% localtime on %}Time : {{ x.date }}{% endlocaltime %}</li>
     {% endfor %}
-    </dl>
-    </li>
+        </ol>
+
+			</li>
     {% endfor %}
-    </ul>
-    </li>
+
+		</ul>
+	</li>
 {% endfor %}
+
 </ul>
 {% endcomment %}
 
 
 {% regroup values by date.month as month_list %}
   <ul>
-  {% for months in month_list reversed%}
-      <li>{{ months.grouper }}
+  {% for months,values in month_list reversed%}
+      <li>{{ values.0|date:"F : Y"}}
       <ol>
-          {% for x in months.list reversed%}
+          {% for x in values reversed%}
           <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
             <li>Value : {{ x.value }}  {% load tz %}{% localtime on %}Time : {{ x.date }}{% endlocaltime %}</li>
           </div>
