@@ -5,8 +5,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <meta charset="utf-8">
     <title>My IOT</title>
-    <h3>All Recorded readings</h3>
     <h3><a href="{% url "chart" %}">Graphical View of readings from last one hour</a></h3>
+    <h3><a href="{% url 'admin:index' %}">link to admin panel</a></h3>
+    <h3>    <a href="{% url "api-root" %}">Api v1</a></h3>
+    <h2>All Recorded readings</h2>
   </head>
 <body>
 
