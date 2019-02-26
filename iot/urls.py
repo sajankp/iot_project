@@ -24,6 +24,6 @@ router.register(r'data', views.DataViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('esp8266.urls')),
-    path('v1/', include(router.urls)),
+    path('api/v1/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
