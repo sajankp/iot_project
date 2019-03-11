@@ -1,0 +1,3 @@
+[submodule "iot_project_esp8266"]
+	path = iot_project_esp8266
+	url = https://github.com/sajankp/iot_project_esp8266.git
