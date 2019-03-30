@@ -4,7 +4,7 @@ import datetime
 from django.utils import timezone
 from channels.testing import WebsocketCommunicator
 from esp8266.consumers import DataConsumer
-import pytest
+import pytest, random, re
 
 class DataTestCase(TestCase):
 
@@ -53,7 +53,7 @@ class TestWebSocket:
     @pytest.mark.asyncio
     async def test_connection(self):
         """
-        Check if websocket connection can be created
+        Check if websocket connection can be created and data is recieved
         """
         communicator = WebsocketCommunicator(DataConsumer, "/ws/post")
         connected, subprotocol = await communicator.connect()
@@ -61,6 +61,35 @@ class TestWebSocket:
         # Test sending text
         await communicator.send_json_to({'value':1})
         response = await communicator.receive_from()
-        #print (response)
         # Close
         await communicator.disconnect()
+
+    @pytest.mark.django_db(transaction=True)
+    @pytest.mark.asyncio
+    async def test_output(self):
+        """
+        Check if the value recieved is right from websocket connection
+        """
+        communicator = WebsocketCommunicator(DataConsumer, "/ws/post")
+        connected, subprotocol = await communicator.connect()
+        value = 1
+        q = datetime.datetime.now()
+        await communicator.send_json_to({'value':value})
+        response = await communicator.receive_from()
+        await communicator.disconnect()
+        assert re.search('Done and recieved {a} at {b}'.format(a=value,b=q.strftime('%Y-%m-%d')),response)
+
+    @pytest.mark.asyncio
+    @pytest.mark.django_db(transaction=True)
+    async def test_value_count(self):
+        communicator = WebsocketCommunicator(DataConsumer, "/ws/post")
+        connected, subprotocol = await communicator.connect()
+        assert connected
+        await communicator.send_json_to({'value':1})
+        await communicator.send_json_to({'value':1})
+        await communicator.send_json_to({'value':0})
+        await communicator.disconnect()
+        a = Data.objects.all()
+        assert a.count(), 3
+        assert Data.objects.filter(value =1).count(), 2
+        assert Data.objects.filter(value =0).count(), 1
