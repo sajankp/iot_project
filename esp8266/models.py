@@ -8,7 +8,6 @@ class Data(models.Model):
     value = models.CharField(max_length = 64)
     date = models.DateTimeField()
 
-    '''
     @property
     def month(self):
         return self.date.month
@@ -20,7 +19,6 @@ class Data(models.Model):
     @property
     def day(self):
         return self.date.day
-    '''
 
     def __str__(self):
         date = datetime.datetime.strftime(self.date,"%D - %T")
