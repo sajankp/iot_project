@@ -59,7 +59,7 @@ class TestWebSocket:
         connected, subprotocol = await communicator.connect()
         assert connected
         # Test sending text
-        await communicator.send_json_to({'value':1})
+        await communicator.send_json_to({'temp':1})
         response = await communicator.receive_from()
         # Close
         await communicator.disconnect()
@@ -74,7 +74,7 @@ class TestWebSocket:
         connected, subprotocol = await communicator.connect()
         value = 1
         q = datetime.datetime.now()
-        await communicator.send_json_to({'value':value})
+        await communicator.send_json_to({'temp':value})
         response = await communicator.receive_from()
         await communicator.disconnect()
         assert re.search('Done and recieved {a} at {b}'.format(a=value,b=q.strftime('%Y-%m-%d')),response)
@@ -85,9 +85,9 @@ class TestWebSocket:
         communicator = WebsocketCommunicator(DataConsumer, "/ws/post")
         connected, subprotocol = await communicator.connect()
         assert connected
-        await communicator.send_json_to({'value':1})
-        await communicator.send_json_to({'value':1})
-        await communicator.send_json_to({'value':0})
+        await communicator.send_json_to({'temp':1})
+        await communicator.send_json_to({'temp':1})
+        await communicator.send_json_to({'temp':0})
         await communicator.disconnect()
         a = Data.objects.all()
         assert a.count(), 3
