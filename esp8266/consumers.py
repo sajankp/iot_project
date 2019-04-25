@@ -12,7 +12,7 @@ class DataConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        a = text_data_json['value']
+        a = text_data_json['temp']
         value = Data(value = a,date = timezone.localtime(timezone.now()))
         value.save()
         self.send(text_data = json.dumps({
