@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .models import Data
 from django.utils import timezone
 from django.urls import reverse
-#import json
+import json
 import datetime
 from rest_framework import viewsets
 from esp8266.serializers import DataSerializer
