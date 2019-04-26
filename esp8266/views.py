@@ -12,7 +12,7 @@ from esp8266.serializers import DataSerializer
 
 @csrf_exempt
 def store(request):
-    a = json.loads(request.body)['value']
+    a = json.loads(request.body)['temp']
     value = Data(value = a,date = timezone.localtime(timezone.now()))
     value.save()
     return HttpResponse(f'Done and recieved {value.value} at {value.date}')
