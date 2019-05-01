@@ -6,9 +6,9 @@ from django.core.validators import MaxValueValidator
 import datetime
 
 class Data(models.Model):
-    date = models.DateTimeField()
-    temperature = models.PositiveSmallIntegerField(validators=[MaxValueValidator(150)])
-    humidity = models.PositiveSmallIntegerField(validators=[MaxValueValidator(150)])
+    date = models.DateTimeField(default = timezone.now)
+    temperature = models.PositiveSmallIntegerField(validators=[MaxValueValidator(150)],default = 0)
+    humidity = models.PositiveSmallIntegerField(validators=[MaxValueValidator(150)],default = 0)
 
     @property
     def month(self):
