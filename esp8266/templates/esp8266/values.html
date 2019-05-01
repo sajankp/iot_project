@@ -27,7 +27,7 @@
 
 				<ol>
     {% for x in days.list %}
-					<li>Value : {{ x.value }}  {% load tz %}{% localtime on %}Time : {{ x.date }}{% endlocaltime %}</li>
+					<li>Temperature : {{ x.temperature }}, Humidity : {{ x.humidity }} {% load tz %}{% localtime on %}Time : {{ x.date }}{% endlocaltime %}</li>
     {% endfor %}
         </ol>
 
@@ -48,8 +48,8 @@
       <li>{{ values.0|date:"F : Y"}}
       <ol>
           {% for x in values reversed%}
-          <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
-            <li>Value : <b>{{ x.value }}</b>  {% load tz %}{% localtime on %}Time : {{ x.date|date:"dS (l) P" }}{% endlocaltime %}</li>
+          <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+            <li>Temperature : {{ x.temperature }}, Humidity : {{ x.humidity }} {% load tz %}{% localtime on %}Time : {{ x.date }}{% endlocaltime %}</li>
           </div>
           {% endfor %}
       <br style="clear:both;"/>
