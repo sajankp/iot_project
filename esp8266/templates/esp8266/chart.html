@@ -9,10 +9,11 @@
 
       var data = new google.visualization.DataTable();
       data.addColumn('datetime', 'Day');
-      data.addColumn('number', 'value');
+      data.addColumn('number', 'temperature');
+      data.addColumn('number', 'humidity')
       {% if values %}
       {% for x in values %}
-        var row =  [new Date({{x.date.timestamp}}*1000), {{x.value}}];
+        var row =  [new Date({{x.date.timestamp}}*1000), {{x.temperature}} , {{x.humidity}}];
         data.addRows([row]);
       {% endfor %}
       {% else %}
@@ -21,19 +22,18 @@
       var options = {
         chart: {
           title: 'Reading recorded',
-          subtitle: 'in last one hour'
+          subtitle: 'in last one hour',
         },
         width: 1000,
         height: 500,
         axes: {
-          x: {
-            0: {side: 'top'}
+          y: {
+            Temps: {label: 'Temps (Celsius)'},
+            Humidity: {label: 'Humidity'},
           }
         }
       };
-
       var chart = new google.charts.Line(document.getElementById('line_top_x'));
-
       chart.draw(data, google.charts.Line.convertOptions(options));
     }
   </script>
