@@ -25,7 +25,7 @@ SECRET_KEY = '4i(#-_)5kt-3j9^qc+abq!w$jtn03mbc!6+u9ni$46)06-0)g#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0','192.168.8.101','.pythonanywhere.com','35.244.13.244']
+ALLOWED_HOSTS = ['0.0.0.0','192.168.225.201','.pythonanywhere.com','35.244.13.244']
 
 
 # Application definition
@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'esp8266.apps.Esp8266Config',
+    'rest_framework',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -123,3 +125,21 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
+
+ASGI_APPLICATION = 'iot.routing.application'
+'''
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+'''
