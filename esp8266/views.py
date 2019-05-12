@@ -13,6 +13,8 @@ from esp8266.serializers import DataSerializer
 
 @csrf_exempt
 def store(request):
+    if json.loads(request.body)['ERROR_IN_MEASUREMENT'] == True:
+        return HttpResponse("Error in value hence not recorded")
     temp = json.loads(request.body)['temp']
     humid = json.loads(request.body)['humidity']
     value = Data(temperature=temp, humidity=humid,
