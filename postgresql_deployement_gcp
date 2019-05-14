@@ -1,0 +1,22 @@
+./manage.py dumpdata > data.json
+
+pip3 install --upgrade setuptools
+
+sudo apt-get install postgresql
+sudo apt-get install python-psycopg2
+sudo apt-get install libpq-dev
+
+sudo -u postgres psql postgres
+sudo -u postgres psql -c "CREATE DATABASE iot_prod;"
+
+git fetch #to take in the new changes in git
+git pull origin gcp #pull in gcp branch
+git branch --set-upstream-to=origin/gcp # set git pull to pull data from origin/gcp instead of origin/master
+
+create db_secret.py with necessary info
+
+./manage.py migrate
+./manage.py loaddata data.json
+
+psql -U postgres -d iot_prod -h 127.0.1
+
