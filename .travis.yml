@@ -3,6 +3,14 @@ install:
 language: python
 python:
   - "3.6"
+env:
+  global:
+    - DJANGO_SETTINGS_MODULE="iot.settings"
+    - PYTHONPATH="/home/travis/build/sajankp/iot_project"
+    - PIP_USE_MIRRORS=true
+    - BUILD_ON_TRAVIS=true
+  matrix:
+    - DJANGO=2.1.7
 script:
   - pytest
 git:
