@@ -21,10 +21,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '4i(#-_)5kt-3j9^qc+abq!w$jtn03mbc!6+u9ni$46)06-0)g#'
+if os.getenv('BUILD_ON_TRAVIS', None):
+    SECRET_KEY = "SecretKeyForUseOnTravis"
+else:
+    with open('iot/secret_key.txt') as f:
+        SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['0.0.0.0','192.168.225.201','.pythonanywhere.com','35.244.13.244']
 
@@ -77,8 +81,6 @@ WSGI_APPLICATION = 'iot.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 if os.getenv('BUILD_ON_TRAVIS', None):
-    SECRET_KEY = "SecretKeyForUseOnTravis"
-    DEBUG = False
     TEMPLATE_DEBUG = True
     DATABASES = {
         'default': {
