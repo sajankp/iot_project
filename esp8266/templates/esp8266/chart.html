@@ -22,7 +22,7 @@
       var options = {
         chart: {
           title: 'Reading recorded',
-          subtitle: 'in last one hour',
+          subtitle: 'Today',
         },
         width: 1000,
         height: 500,
@@ -41,7 +41,7 @@
 <body>
   <div id="line_top_x"></div>
   {% if not values %}
-  <h3>  No Readings in last hour </h3>
+  <h3>  No Readings were recorded today </h3>
   {% endif %}
 </body>
 </html>

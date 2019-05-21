@@ -30,9 +30,19 @@ def index(request):
 
 
 def chart(request):
-    now_in_timezone = timezone.now()
-    one_hour_ago = now_in_timezone - datetime.timedelta(seconds=60*60)
-    values = Data.objects.filter(date__range=[one_hour_ago, now_in_timezone])
+    '''
+    Another way of implementing
+    today = datetime.date.today()
+    today_with_time = datetime.datetime(
+        year=today.year,
+        month=today.month,
+        day=today.day,
+        tzinfo = timezone.utc,
+    )
+    values = Data.objects.filter(date__gte=today_with_time-datetime.timedelta(seconds=60*60*5.5))
+    '''
+    values = Data.objects.filter(date__gte=datetime.date.today())
+    #When USE_TZ is True, fields are converted to the current time zone before filtering.
     context = {"values": values}
     return render(request, "esp8266/chart.html", context)
 
