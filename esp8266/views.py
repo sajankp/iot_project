@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from .models import Data
 from django.utils import timezone
 from django.urls import reverse
@@ -14,13 +14,17 @@ from esp8266.serializers import DataSerializer
 @csrf_exempt
 def store(request):
     if json.loads(request.body)['ERROR_IN_MEASUREMENT'] == True:
-        return HttpResponse("Error in value hence not recorded")
+        return JsonResponse({'message':"Error in value hence not recorded"})
+    if json.loads(request.body)['FIRST'] == True:
+        a=timezone.now()
+        return JsonResponse({'time':(14-a.minute%15)*60+(90-a.second),
+                            'message':"Reading will be recorded next time, now time is "+str(a)})
     temp = json.loads(request.body)['temp']
     humid = json.loads(request.body)['humidity']
     value = Data(temperature=temp, humidity=humid,
                  date=timezone.localtime(value=timezone.now()))
     value.save()
-    return HttpResponse(value)
+    return JsonResponse({'message':str(value)})
 
 
 def index(request):
