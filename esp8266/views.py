@@ -17,7 +17,7 @@ def store(request):
         return JsonResponse({'message':"Error in value hence not recorded"})
     if json.loads(request.body)['FIRST'] == True:
         a=timezone.now()
-        return JsonResponse({'time':(14-a.minute%15)*60+(60-a.second),
+        return JsonResponse({'time':(14-a.minute%15)*60+(90-a.second),
                             'message':"Reading will be recorded next time, now time is "+str(a)})
     temp = json.loads(request.body)['temp']
     humid = json.loads(request.body)['humidity']
