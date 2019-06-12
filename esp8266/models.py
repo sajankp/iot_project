@@ -25,3 +25,6 @@ class Data(models.Model):
     def __str__(self):
         date = datetime.datetime.strftime(self.date,"%D - %T")
         return f"Temperature: {self.temperature} and Humidity: {self.humidity} recorded on {date}"
+
+    class Meta:
+        ordering = ['-date']
