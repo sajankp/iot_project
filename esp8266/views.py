@@ -35,7 +35,7 @@ def index(request):
 
 def chart(request):
     '''
-    Another way of implementing
+    # Another way of implementing
     today = datetime.date.today()
     today_with_time = datetime.datetime(
         year=today.year,
@@ -57,3 +57,25 @@ class DataViewSet(viewsets.ModelViewSet):
     """
     queryset = Data.objects.all().order_by('date')
     serializer_class = DataSerializer
+
+'''
+from esp8266.forms import DateForm
+from django.views import generic
+class DataListView(generic.ListView):
+    model = Data
+    def get_queryset(self):
+        return Data.objects.filter(date__gte=datetime.date.today())
+    context_object_name = "values"
+    template_name = 'esp8266/test.html'
+'''
+
+from esp8266.forms import DateForm
+def test(request):
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = DateForm(request.POST)
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = DateForm()
+    values = Data.objects.filter(date__date=form['date'].value())
+    return render(request, 'esp8266/test.html', {'form': form, 'values':values})

@@ -1,0 +1,69 @@
+<html>
+<head>
+
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+  <!-- Fengyuan Chen's Datepicker -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+      google.charts.load('current', {'packages':['line']});
+      google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('datetime', 'Day');
+      data.addColumn('number', 'temperature');
+      data.addColumn('number', 'humidity')
+      {% if values %}
+      {% for x in values %}
+        var row =  [new Date({{x.date.timestamp}}*1000), {{x.temperature}} , {{x.humidity}}];
+        data.addRows([row]);
+      {% endfor %}
+      {% else %}
+        data.addRows([[new Date(0),0]]);
+      {% endif %}
+      var options = {
+        chart: {
+          title: 'Readings recorded on ' + $("#id_date")[0].value
+        },
+        width: 1000,
+        height: 500,
+        axes: {
+          y: {
+            Temps: {label: 'Temps (Celsius)'},
+            Humidity: {label: 'Humidity'},
+          }
+        }
+      };
+      var chart = new google.charts.Line(document.getElementById('line_top_x'));
+      chart.draw(data, google.charts.Line.convertOptions(options));
+    }
+  </script>
+</head>
+<body>
+  <form action="/test" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit">
+</form>
+  <div id="line_top_x"></div>
+  <script>
+  $(function () {
+    $("#id_date").datepicker({
+      format:'yyyy-mm-dd',
+      changeMonth: true,
+      changeYear: true,
+      yearRange: "2019:2025",
+    });
+  });
+</script>
+  {% if not values %}
+  <h3>  No Readings were recorded On this day </h3>
+  {% endif %}
+</body>
+</html>
