@@ -21,4 +21,6 @@ urlpatterns = [
     path('post', views.store, name = 'store'),
     path('', views.index, name = "index"),
     path('chart', views.chart, name = "chart"),
+    # path('test', views.DataListView.as_view(), name="test"),
+    path('test', views.test, name="test"),
 ]
