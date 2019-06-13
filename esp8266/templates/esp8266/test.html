@@ -1,6 +1,8 @@
-<html>
-<head>
+{% extends "base_generic.html" %}
 
+{% block title %}<title>Test1 page of my IOT website</title>{% endblock %}
+
+{% block content %}
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
   <!-- jQuery -->
@@ -9,23 +11,24 @@
   <!-- Fengyuan Chen's Datepicker -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
+
+  <div id="line_top_x"></div>
   <script type="text/javascript">
       google.charts.load('current', {'packages':['line']});
       google.charts.setOnLoadCallback(drawChart);
 
-    function drawChart() {
-
+      function drawChart() {
       var data = new google.visualization.DataTable();
-      data.addColumn('datetime', 'Day');
-      data.addColumn('number', 'temperature');
-      data.addColumn('number', 'humidity')
+      data.addColumn('datetime', 'Time');
+      data.addColumn('number', 'Temperature');
+      data.addColumn('number', 'Humidity')
       {% if values %}
       {% for x in values %}
-        var row =  [new Date({{x.date.timestamp}}*1000), {{x.temperature}} , {{x.humidity}}];
+        var row =  [new Date({{x.date.timestamp}}*1000),{{x.temperature}},{{x.humidity}}];
         data.addRows([row]);
       {% endfor %}
       {% else %}
-        data.addRows([[new Date(0),0]]);
+        data.addRows([[new Date(0),1,2]]);
       {% endif %}
       var options = {
         chart: {
@@ -44,26 +47,20 @@
       chart.draw(data, google.charts.Line.convertOptions(options));
     }
   </script>
-</head>
-<body>
+  <script>
+    $(function () {
+      $("#id_date").datepicker({
+        format:'yyyy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "2019:2025",
+      });
+    });
+  </script>
+  <p>Number of readings taken on this day: {{count}}
   <form action="/test" method="post">
     {% csrf_token %}
     {{ form }}
     <input type="submit" value="Submit">
-</form>
-  <div id="line_top_x"></div>
-  <script>
-  $(function () {
-    $("#id_date").datepicker({
-      format:'yyyy-mm-dd',
-      changeMonth: true,
-      changeYear: true,
-      yearRange: "2019:2025",
-    });
-  });
-</script>
-  {% if not values %}
-  <h3>  No Readings were recorded On this day </h3>
-  {% endif %}
-</body>
-</html>
+  </form>
+{% endblock %}

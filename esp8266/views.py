@@ -32,7 +32,6 @@ def index(request):
     context = {"values": values}
     return render(request, "esp8266/values.html", context)
 
-
 def chart(request):
     '''
     # Another way of implementing
@@ -58,16 +57,11 @@ class DataViewSet(viewsets.ModelViewSet):
     queryset = Data.objects.all().order_by('date')
     serializer_class = DataSerializer
 
-'''
-from esp8266.forms import DateForm
 from django.views import generic
 class DataListView(generic.ListView):
     model = Data
-    def get_queryset(self):
-        return Data.objects.filter(date__gte=datetime.date.today())
-    context_object_name = "values"
-    template_name = 'esp8266/test.html'
-'''
+    #paginate_by = 50
+
 
 from esp8266.forms import DateForm
 def test(request):
@@ -78,4 +72,4 @@ def test(request):
     else:
         form = DateForm()
     values = Data.objects.filter(date__date=form['date'].value())
-    return render(request, 'esp8266/test.html', {'form': form, 'values':values})
+    return render(request, 'esp8266/test.html', {'form': form, 'values':values, 'count':len(values)})
