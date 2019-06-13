@@ -1,0 +1,30 @@
+{% extends "base_generic.html" %}
+
+{% block title %}<title>Test2 page of my IOT website</title>{% endblock %}
+
+{% block content %}
+
+{% comment %}
+  <ul>
+    {% for data in data_list %}
+      <li>Temperature : {{ data.temperature }}, Humidity : {{ data.humidity }} {% load tz %}{% localtime on %}Time : {{ data.date }}{% endlocaltime %}</li>
+    {% endfor %}
+  </ul>
+{% endcomment %}
+
+  {% regroup data_list by date.month as month_list %}
+    <ul>
+    {% for months,data_list in month_list %}
+        <li>{{ data_list.0|date:"F : Y"}}
+        <ol>
+            {% for x in data_list %}
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+              <li>Temperature : {{ x.temperature }}, Humidity : {{ x.humidity }} {% load tz %}{% localtime on %}Time : {{ x.date }}{% endlocaltime %}</li>
+            </div>
+            {% endfor %}
+        <br style="clear:both;"/>
+        </ol>
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}
