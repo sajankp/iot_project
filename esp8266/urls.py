@@ -23,4 +23,5 @@ urlpatterns = [
     path('chart', views.chart, name = "chart"),
     path('test2', views.DataListView.as_view(), name="test2"),
     path('test', views.test, name="test"),
+    path('test3',views.test3,name="test3"),
 ]
