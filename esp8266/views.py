@@ -4,10 +4,13 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from .models import Data
 from django.utils import timezone
 from django.urls import reverse
-import json
+import json,collections
 import datetime
 from rest_framework import viewsets
 from esp8266.serializers import DataSerializer
+from esp8266.forms import DateForm,DataFilterForm
+from django.views import generic
+from itertools import groupby
 # Create your views here.
 
 
@@ -54,16 +57,15 @@ class DataViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows data to be viewed or edited.
     """
-    queryset = Data.objects.all().order_by('date')
+    queryset = Data.objects.all()
     serializer_class = DataSerializer
 
-from django.views import generic
+
 class DataListView(generic.ListView):
     model = Data
     #paginate_by = 50
 
 
-from esp8266.forms import DateForm
 def test(request):
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -73,3 +75,30 @@ def test(request):
         form = DateForm()
     values = Data.objects.filter(date__date=form['date'].value())
     return render(request, 'esp8266/test.html', {'form': form, 'values':values, 'count':len(values)})
+
+def test3(request):
+    """
+    The filtered data based on form input with minimum and maximum of temp/humidity
+    """
+    if request.method == "POST":
+        form = DataFilterForm(request.POST)
+    else:
+        form = DataFilterForm()
+    if form['filter'].value()=='mh':
+        values=Data.objects.filter(date__month=timezone.localdate().month)
+    elif form['filter'].value()=='yr':
+        values=Data.objects.filter(date__year=timezone.localdate().year)
+    else:
+        values=Data.objects.filter(date__week=timezone.localdate().isocalendar()[1])
+    print(form['reading'].value(),type(form['reading'].value()))
+    if form['reading'].value()==1 or form['reading'].value()=='1':
+        b={(x.date.date(),x.temperature) for x in values}
+    else:
+        b={(x.date.date(),x.humidity) for x in values}
+    b=sorted(list(b))
+    max_values = (max(list(group)) for key, group in groupby(b,key=lambda x:x[0]))
+    min_values = (min(list(group)) for key, group in groupby(b,key=lambda x:x[0]))
+    combined_values = zip(max_values,min_values)
+    reading=collections.namedtuple('Reading',['date','max_reading','min_reading'])
+    values = [reading(x[0][0],x[0][1],x[1][1]) for x in combined_values]
+    return render(request,'esp8266/test3.html',{"form":form,"values":values})
