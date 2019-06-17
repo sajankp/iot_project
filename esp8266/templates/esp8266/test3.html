@@ -3,11 +3,11 @@
 {% block title %}<title>Test3 page</title>{% endblock %}
 
 {% block content %}
-<form action="/test3" method="post">
-  {% csrf_token %}
+<form action="/test3" method="get">
   {{ form }}
   <input type="submit" value="Submit">
 </form>
+<p></p>
 
 {% comment %}
 <ul>
@@ -17,6 +17,8 @@
 </ul>
 {% endcomment %}
 
+<div id="bar_chart"></div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
     google.charts.load('current', {'packages':['bar']});
@@ -25,8 +27,8 @@
     function drawChart() {
     var data = new google.visualization.DataTable();
     data.addColumn('datetime', 'Time');
-    data.addColumn('number', 'Max');
-    data.addColumn('number', 'Min')
+    data.addColumn('number', 'Maximum');
+    data.addColumn('number', 'Minimum')
     {% if values %}
     {% for x in values %}
       var row =  [new Date('{{x.date.isoformat}}'),{{x.max_reading}},{{x.min_reading}}];
@@ -37,8 +39,14 @@
     {% endif %}
     var options = {
       chart: {
-        title: 'Readings recorded'
+        title: "Maximum and Minimum " + $("#id_reading")[0].selectedOptions[0].innerText,
+        subtitle:" recorded this " + $("#id_filter")[0].selectedOptions[0].innerText,
       },
+      hAxis: {format: 'd/M/yyyy' },
+      axes: {
+          y: {0: {label: $("#id_reading")[0].selectedOptions[0].innerText } },
+          x: {0: {label: "Date" } },
+           },
       width: 1000,
       height: 500,
     };
@@ -46,5 +54,5 @@
     chart.draw(data, google.charts.Bar.convertOptions(options));
   }
 </script>
-<div id="bar_chart"></div>
+
 {% endblock %}
