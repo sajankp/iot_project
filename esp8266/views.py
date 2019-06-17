@@ -67,12 +67,10 @@ class DataListView(generic.ListView):
 
 
 def test(request):
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = DateForm(request.POST)
-    # if a GET (or any other method) we'll create a blank form
-    else:
+    if not request.GET:
         form = DateForm()
+    else:
+        form = DateForm(request.GET)
     values = Data.objects.filter(date__date=form['date'].value())
     return render(request, 'esp8266/test.html', {'form': form, 'values':values, 'count':len(values)})
 
@@ -80,18 +78,17 @@ def test3(request):
     """
     The filtered data based on form input with minimum and maximum of temp/humidity
     """
-    if request.method == "POST":
-        form = DataFilterForm(request.POST)
-    else:
+    if not request.GET:
         form = DataFilterForm()
+    else:
+        form = DataFilterForm(request.GET)
     if form['filter'].value()=='mh':
         values=Data.objects.filter(date__month=timezone.localdate().month)
     elif form['filter'].value()=='yr':
         values=Data.objects.filter(date__year=timezone.localdate().year)
     else:
         values=Data.objects.filter(date__week=timezone.localdate().isocalendar()[1])
-    print(form['reading'].value(),type(form['reading'].value()))
-    if form['reading'].value()==1 or form['reading'].value()=='1':
+    if form['reading'].value() == '1':
         b={(x.date.date(),x.temperature) for x in values}
     else:
         b={(x.date.date(),x.humidity) for x in values}

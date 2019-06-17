@@ -58,8 +58,7 @@
     });
   </script>
   <p>Number of readings taken on this day: {{count}}
-  <form action="/test" method="post">
-    {% csrf_token %}
+  <form action="/test" method="get">
     {{ form }}
     <input type="submit" value="Submit">
   </form>
