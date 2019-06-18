@@ -1,0 +1,17 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h2>Sensor: {{ sensor.description }}, {{sensor.is_outdoor|yesno:"Outdoor,Indoor"}}</h2>
+
+  <h5><a href="{{ sensor.appartement.get_absolute_url }}">Appartment: {{sensor.appartement}}</a></h5>
+  <h5><a href="{{ sensor.appartement.building.get_absolute_url }}">Building: {{sensor.appartement.building}}</a></h5>
+
+  <div style="margin-top:20px">
+    <h4>Data Recorded</h4>
+    <ul>
+    {% for data in sensor.data_set.all %}
+      <li style="margin-left:-20px">{{data}}</li>
+    {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

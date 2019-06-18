@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from .models import Data
+from .models import Data,Sensor,Appartement,Building
 from django.utils import timezone
 from django.urls import reverse
 import json,collections
@@ -99,3 +99,19 @@ def test3(request):
     reading=collections.namedtuple('Reading',['date','max_reading','min_reading'])
     values = [reading(x[0][0],x[0][1],x[1][1]) for x in combined_values]
     return render(request,'esp8266/test3.html',{"form":form,"values":values})
+
+
+class SensorDetailView(generic.DetailView):
+    model = Sensor
+
+
+class AppartementDetailView(generic.DetailView):
+    model = Appartement
+
+
+class BuildingDetailView(generic.DetailView):
+    model = Building
+
+
+class BuildingListView(generic.ListView):
+    model = Building

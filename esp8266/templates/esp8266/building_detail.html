@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h2>Building: {{ building.building_name }} </h2>
+
+<ul style="margin-left:-35px;list-style: none;">
+  <li >Building Location: {{ building.field_2 }}</li>
+  <li>Town: {{ building.town }}</li>
+  <li>Nearest Landmark: {{ building.landmark }}</li>
+  <li>State Code: {{ building.state }}</li>
+  <li>Pincode: {{ building.pincode }}</li>
+</ul>
+
+  <div style="margin-top:20px">
+    <h4>Appartments</h4>
+    <ul>
+    {% for appartement in building.appartement_set.all %}
+      <li style="margin-left:-20px"><a href="{{ appartement.get_absolute_url }}">{{appartement}}</a></li>
+    {% endfor %}
+    </ul>
+  </div>
+{% endblock %}
