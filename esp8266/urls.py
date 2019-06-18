@@ -24,4 +24,8 @@ urlpatterns = [
     path('test2', views.DataListView.as_view(), name="test2"),
     path('test', views.test, name="test"),
     path('test3',views.test3,name="test3"),
+    path('sensor/<int:pk>', views.SensorDetailView.as_view(), name='sensor-detail'),
+    path('appartement/<int:pk>', views.AppartementDetailView.as_view(), name='appartement-detail'),
+    path('building/<int:pk>', views.BuildingDetailView.as_view(), name='building-detail'),
+    path('buildings',views.BuildingListView.as_view(), name='building-list'),
 ]

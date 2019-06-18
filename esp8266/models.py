@@ -3,6 +3,7 @@ from datetime import datetime
 from django.utils import timezone
 from django.core.validators import MaxValueValidator
 from uuid import uuid4
+from django.urls import reverse
 # Create your models here.
 
 class Data(models.Model):
@@ -46,14 +47,19 @@ class Sensor(models.Model):
         default=False,
         help_text="The location of sensor",
         )
-    appartment = models.ForeignKey('Appartment', on_delete=models.SET_NULL, null=True)
+    appartement = models.ForeignKey('Appartement', on_delete=models.SET_NULL, null=True)
     def __str__(self):
         return f"sensor located at {self.description}"
+
+    def get_absolute_url(self):
+        """Return the url to access detail record for each Sensor"""
+        return reverse('sensor-detail', args=[self.id])
 
     class Meta:
         ordering = ['-created_date']
 
-class Appartment(models.Model):
+
+class Appartement(models.Model):
     """represent many adresses within one building"""
     created_date = models.DateTimeField(auto_now_add=True)
     last_modified_date = models.DateTimeField(auto_now=True)
@@ -68,6 +74,9 @@ class Appartment(models.Model):
     building = models.ForeignKey('Building', on_delete=models.SET_NULL, null=True)
     def __str__(self):
         return f'{self.field_1}'
+    def get_absolute_url(self):
+        """Return the url to access detail record for each Appartement"""
+        return reverse('appartement-detail', args=[self.id])
     class Meta:
         ordering = ['building','field_1']
 
@@ -135,3 +144,8 @@ class Building(models.Model):
     longitude=models.DecimalField(max_digits=10, decimal_places=7, null=True)
     def __str__(self):
         return f"{self.building_name} in {self.town}"
+    def get_absolute_url(self):
+        """Return the url to access detail record for each Building"""
+        return reverse('building-detail', args=[self.id])
+    class Meta:
+        ordering = ['state','town','created_date']

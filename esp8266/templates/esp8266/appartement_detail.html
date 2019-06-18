@@ -1,0 +1,26 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h2>Appartement: {{ appartement.field_1 }}</h2>
+
+  <ul style="margin-left:-35px;list-style: none;">
+    <li>Owner's Name: {{ appartement.name }}</li>
+    <li>Contact: {{ appartement.mobile_number }}</li>
+    <li>Building Location: {{ appartement.building.field_2 }}</li>
+    <li>Town: {{ appartement.building.town }}</li>
+    <li>Nearest Landmark: {{ appartement.building.landmark }}</li>
+    <li>State Code: {{ appartement.building.state }}</li>
+    <li>Pincode: {{ appartement.building.pincode }}</li>
+  </ul>
+
+  <h5>Building: <a href="{{ appartement.building.get_absolute_url }}">{{appartement.building}}</a></h5>
+
+  <div style="margin-top:20px">
+    <h4>Sensors in Appartement</h4>
+    <ol>
+    {% for sensor in appartement.sensor_set.all %}
+      <li style="margin-left:-20px"><a href="{{sensor.get_absolute_url}}">{{ sensor }}</a>, location: {{sensor.is_outdoor|yesno:"Outdoor,Indoor"}} ({{sensor.data_set.all.count}} readings recorded)</li>
+    {% endfor %}
+    </ol>
+  </div>
+{% endblock %}
