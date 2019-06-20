@@ -3,21 +3,20 @@
 {% block title %}<title>Test3 page</title>{% endblock %}
 
 {% block content %}
-<form action="/test3" method="get">
+<div class="col-sm-8">
+<h4>Sensor: <a href="{{sensor.get_absolute_url}}">{{sensor}}</a></h4>
+<h5>Appartment: <a href="{{sensor.appartement.get_absolute_url}}">{{sensor.appartement}}</a></h5>
+<h5>Building: <a href="{{sensor.appartement.building.et_absolute_url}}">{{sensor.appartement.building}}</a></h5>
+<div id="bar_chart" style="width: 1200px;height: 450px;"></div>
+</div>
+<div class="col-sm-4">
+<form action="" method="get">
   {{ form }}
-  <input type="submit" value="Submit">
+  <input type="submit" value="Filter">
 </form>
-<p></p>
-
-{% comment %}
-<ul>
-  {% for data in values %}
-    <li>{% load tz %}{% localtime on %}Time : {{ data.date }}{% endlocaltime %} max: {{ data.max_reading }} min: {{ data.min_reading }}</li>
-  {% endfor %}
-</ul>
-{% endcomment %}
-
-<div id="bar_chart"></div>
+<br>
+<p><a href="{% url "graph_per_day" sensor.pk %}">Graph of Data from Any day</a></p>
+</div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
@@ -27,11 +26,11 @@
     function drawChart() {
     var data = new google.visualization.DataTable();
     data.addColumn('datetime', 'Time');
-    data.addColumn('number', 'Maximum');
-    data.addColumn('number', 'Minimum')
+    data.addColumn('number', 'Minimum');
+    data.addColumn('number', 'Maximum')
     {% if values %}
     {% for x in values %}
-      var row =  [new Date('{{x.date.isoformat}}'),{{x.max_reading}},{{x.min_reading}}];
+      var row =  [new Date('{{x.date.isoformat}}'),{{x.min_reading}},{{x.max_reading}}];
       data.addRows([row]);
     {% endfor %}
     {% else %}
@@ -47,8 +46,6 @@
           y: {0: {label: $("#id_reading")[0].selectedOptions[0].innerText } },
           x: {0: {label: "Date" } },
            },
-      width: 1000,
-      height: 500,
     };
     var chart = new google.charts.Bar(document.getElementById('bar_chart'));
     chart.draw(data, google.charts.Bar.convertOptions(options));

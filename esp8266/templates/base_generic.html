@@ -4,27 +4,27 @@
   {% block title %}<title>My IOT Website</title>{% endblock %}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <!-- Add additional CSS in static file -->
   {% load static %}
 </head>
 <body>
   <div class="container-fluid">
-    <div class="row">
-      <div class="col-sm-2">
       {% block sidebar %}
-        <ul class="sidebar-nav">
-          <li><a href="{% url "index" %}">Homepage</a></li>
-          <li><a href="{% url "chart" %}">Graphical View of today's readings</a></li>
+    <nav class="navbar navbar-inverse">
+        <div class="navbar-header">
+          <li style="list-style: none" class="navbar-brand">My IoT Project</li>
+        </div>
+      <ul class="nav navbar-nav">
+          <li class="active"><a href="{% url "index" %}">Home</a></li>
           <li><a href="{% url "admin:index" %}">Admin</a></li>
           <li><a href="{% url "api-root" %}">Rest Api</a></li>
-          <li><a href="{% url "test" %}">Test page 1</a></li>
-          <li><a href="{% url "test2" %}">Test page 2</a></li>
-          <li><a href="{% url "test3" %}">Test page 3</a></li>
         </ul>
+    </nav>
      {% endblock %}
-      </div>
-      <div class="col-sm-10 ">{% block content %}{% endblock %}
+        {% block content %}{% endblock %}
         {% block pagination %}
           {% if is_paginated %}
               <div class="pagination">
@@ -42,8 +42,6 @@
               </div>
           {% endif %}
         {% endblock %}
-      </div>
-    </div>
   </div>
 </body>
 </html>

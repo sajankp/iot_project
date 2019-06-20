@@ -12,7 +12,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
 
-  <div id="line_top_x"></div>
   <script type="text/javascript">
       google.charts.load('current', {'packages':['line']});
       google.charts.setOnLoadCallback(drawChart);
@@ -32,10 +31,8 @@
       {% endif %}
       var options = {
         chart: {
-          title: 'Readings recorded on ' + $("#id_date")[0].value
+          title: '{% if count == 1 or count == 0 %} Reading{% else %} Readings{% endif %} recorded on ' + $("#id_date")[0].value
         },
-        width: 1000,
-        height: 500,
         axes: {
           y: {
             Temps: {label: 'Temps (Celsius)'},
@@ -43,7 +40,7 @@
           }
         }
       };
-      var chart = new google.charts.Line(document.getElementById('line_top_x'));
+      var chart = new google.charts.Line(document.getElementById('chart_div'));
       chart.draw(data, google.charts.Line.convertOptions(options));
     }
   </script>
@@ -57,9 +54,20 @@
       });
     });
   </script>
-  <p>Number of readings taken on this day: {{count}}
-  <form action="/test" method="get">
+  <div class="col-sm-8">
+  <h4>Sensor: <a href="{{sensor.get_absolute_url}}">{{sensor}}</a></h4>
+  <h5>Appartment: <a href="{{sensor.appartement.get_absolute_url}}">{{sensor.appartement}}</a></h5>
+  <h5>Building: <a href="{{sensor.appartement.building.et_absolute_url}}">{{sensor.appartement.building}}</a></h5>
+
+    <div id="chart_div" style="width: 1200px;height: 450px;"></div>
+  </div>
+  <div class="col-sm-4">
+  <form action="" method="get">
     {{ form }}
-    <input type="submit" value="Submit">
+    <input type="submit" value="Display">
   </form>
+  <br>
+  <p>Number of {% if count == 1 or count == 0 %} reading{% else %} readings{% endif %} taken on this day: {{count}}
+    <p><a href="{% url "graph_max_min" sensor.pk %}">Graph of Maximum and Minimum recoded in various periods</a></p>
+  </div>
 {% endblock %}

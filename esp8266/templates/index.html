@@ -1,0 +1,35 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="col-sm-1"></div>
+<div class="col-sm-11">
+
+  <p>This website have the following record count:</p>
+  <ul>
+    <li><strong>Buildings:</strong> {{ num_buildings }}</li>
+    <li><strong>Appartments:</strong> {{ num_appartements }}</li>
+    <li><strong>Sensors:</strong> {{ num_sensors }}</li>
+    <li><strong>Readings recorded:</strong> {{ num_datas }}</li>
+  </ul>
+  <p>You have visited this page {{ num_visits }}{% if num_visits == 1 %} time{% else %} times{% endif %}.</p>
+
+  <div style="margin-top:20px">
+    <h3 style="margin-left:20px">Buildings</h3>
+    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+      <ol>
+      {% for building in buildings %}
+        <li style="margin-left:20px"><a href="{{ building.get_absolute_url }}">{{building}}</a></li>
+          <ul style="list-style: none;">
+            <li>Building Location: {{ building.field_2 }}</li>
+            <li>Town: {{ building.town }}</li>
+            <li>Nearest Landmark: {{ building.landmark }}</li>
+            <li>State Code: {{ building.state }}</li>
+            <li>Pincode: {{ building.pincode }}</li>
+          </ul>
+      {% endfor %}
+      </ol>
+    </div>
+  </div>
+
+</div>
+{%endblock%}
