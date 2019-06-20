@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% block title %}<title>My IOT Website</title>{% endblock %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <!-- Add additional CSS in static file -->
+  {% load static %}
+</head>
+<body>
+  <div class="container-fluid">
+      {% block sidebar %}
+    <nav class="navbar navbar-inverse">
+        <div class="navbar-header">
+          <li style="list-style: none" class="navbar-brand">My IoT Project</li>
+        </div>
+      <ul class="nav navbar-nav">
+          <li class="active"><a href="{% url "index" %}">Home</a></li>
+          <li><a href="{% url "admin:index" %}">Admin</a></li>
+          <li><a href="{% url "api-root" %}">Rest Api</a></li>
+        </ul>
+    </nav>
+     {% endblock %}
+        {% block content %}{% endblock %}
+        {% block pagination %}
+          {% if is_paginated %}
+              <div class="pagination">
+                  <span class="page-links">
+                      {% if page_obj.has_previous %}
+                          <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
+                      {% endif %}
+                      <span class="page-current">
+                          Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                      </span>
+                      {% if page_obj.has_next %}
+                          <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
+                      {% endif %}
+                  </span>
+              </div>
+          {% endif %}
+        {% endblock %}
+  </div>
+</body>
+</html>

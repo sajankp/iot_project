@@ -1,0 +1,34 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="col-sm-1"></div>
+<div class="col-sm-11">
+  <h2>Appartement: {{ appartement.field_1 }}</h2>
+
+  <ul style="list-style: none;">
+    <li>Owner's Name: {{ appartement.name }}</li>
+    <li>Contact: {{ appartement.mobile_number }}</li>
+    <li>Building Location: {{ appartement.building.field_2 }}</li>
+    <li>Town: {{ appartement.building.town }}</li>
+    <li>Nearest Landmark: {{ appartement.building.landmark }}</li>
+    <li>State Code: {{ appartement.building.state }}</li>
+    <li>Pincode: {{ appartement.building.pincode }}</li>
+    <li><h4>Building: <a href="{{ appartement.building.get_absolute_url }}">{{appartement.building}}</a></h4></li>
+  </ul>
+
+  <div style="margin-top:20px">
+    <h4>Sensors in Appartement</h4>
+    <ol>
+    {% for sensor in appartement.sensor_set.all %}
+      <li><a href="{{sensor.get_absolute_url}}">{{ sensor }}</a></li>
+        <ul style="margin-left:-25px;list-style: none">
+          <li>location: {{sensor.is_outdoor|yesno:"Outdoor,Indoor"}}</li>
+          <li>Number of readings till date: {{sensor.data_set.all.count}}</li>
+          <li><a href="{% url "graph_per_day" sensor.pk %}">Graph of Data from Any day</a></li>
+          <li><a href="{% url "graph_max_min" sensor.pk %}">Graph of Maximum and Minimum recoded in various periods</a></li>
+        </ul>
+    {% endfor %}
+    </ol>
+  </div>
+</div>
+{% endblock %}
