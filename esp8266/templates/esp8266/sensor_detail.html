@@ -1,0 +1,33 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="col-sm-1"></div>
+<div class="col-sm-11">
+  <h2>Sensor: {{ sensor.description }}, {{sensor.is_outdoor|yesno:"Outdoor,Indoor"}}</h2>
+
+  <h4><a href="{{ sensor.appartement.get_absolute_url }}">Appartment: {{sensor.appartement}}</a></h4>
+  <h4><a href="{{ sensor.appartement.building.get_absolute_url }}">Building: {{sensor.appartement.building}}</a></h4>
+  <h4><a href="{% url "graph_per_day" sensor.pk %}">Graph of Data from Any day</a></h4>
+  <h4><a href="{% url "graph_max_min" sensor.pk %}">Graph of Maximum and Minimum recoded in various periods</a></h4>
+
+  <div style="margin-top:20px">
+    <h4>Data Recorded</h4>
+    {% regroup sensor.data_set.all by date.month as month_list %}
+      <ul>
+      {% for months,data_list in month_list %}
+          <li style="margin-left:10px">{{ data_list.0|date:"F : Y"}}
+          <ol>
+              {% for x in data_list %}
+              <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+                <li>Temperature : {{ x.temperature }}, Humidity : {{ x.humidity }} {% load tz %}{% localtime on %}Time : {{ x.date }}{% endlocaltime %}</li>
+              </div>
+              {% endfor %}
+          <br style="clear:both;"/>
+          </ol>
+          </li>
+      {% endfor %}
+      </ul>
+  </div>
+</div>
+
+{% endblock %}

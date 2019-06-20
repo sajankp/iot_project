@@ -1,0 +1,73 @@
+{% extends "base_generic.html" %}
+
+{% block title %}<title>Test1 page of my IOT website</title>{% endblock %}
+
+{% block content %}
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+  <!-- Fengyuan Chen's Datepicker -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
+
+  <script type="text/javascript">
+      google.charts.load('current', {'packages':['line']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('datetime', 'Time');
+      data.addColumn('number', 'Temperature');
+      data.addColumn('number', 'Humidity')
+      {% if values %}
+      {% for x in values %}
+        var row =  [new Date({{x.date.timestamp}}*1000),{{x.temperature}},{{x.humidity}}];
+        data.addRows([row]);
+      {% endfor %}
+      {% else %}
+        data.addRows([[new Date(0),1,2]]);
+      {% endif %}
+      var options = {
+        chart: {
+          title: '{% if count == 1 or count == 0 %} Reading{% else %} Readings{% endif %} recorded on ' + $("#id_date")[0].value
+        },
+        axes: {
+          y: {
+            Temps: {label: 'Temps (Celsius)'},
+            Humidity: {label: 'Humidity'},
+          }
+        }
+      };
+      var chart = new google.charts.Line(document.getElementById('chart_div'));
+      chart.draw(data, google.charts.Line.convertOptions(options));
+    }
+  </script>
+  <script>
+    $(function () {
+      $("#id_date").datepicker({
+        format:'yyyy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "2019:2025",
+      });
+    });
+  </script>
+  <div class="col-sm-8">
+  <h4>Sensor: <a href="{{sensor.get_absolute_url}}">{{sensor}}</a></h4>
+  <h5>Appartment: <a href="{{sensor.appartement.get_absolute_url}}">{{sensor.appartement}}</a></h5>
+  <h5>Building: <a href="{{sensor.appartement.building.et_absolute_url}}">{{sensor.appartement.building}}</a></h5>
+
+    <div id="chart_div" style="width: 1200px;height: 450px;"></div>
+  </div>
+  <div class="col-sm-4">
+  <form action="" method="get">
+    {{ form }}
+    <input type="submit" value="Display">
+  </form>
+  <br>
+  <p>Number of {% if count == 1 or count == 0 %} reading{% else %} readings{% endif %} taken on this day: {{count}}
+    <p><a href="{% url "graph_max_min" sensor.pk %}">Graph of Maximum and Minimum recoded in various periods</a></p>
+  </div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="col-sm-1"></div>
+<div class="col-sm-11">
+  <h2>Building: {{ building.building_name }} </h2>
+
+<ul style="list-style: none;">
+  <li>Building Location: {{ building.field_2 }}</li>
+  <li>Town: {{ building.town }}</li>
+  <li>Nearest Landmark: {{ building.landmark }}</li>
+  <li>State Code: {{ building.state }}</li>
+  <li>Pincode: {{ building.pincode }}</li>
+</ul>
+
+  <div style="margin-top:20px">
+    <h3 style="margin-left:20px">Appartments</h3>
+    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
+    <ol>
+    {% for appartement in building.appartement_set.all %}
+      <li style="margin-left:20px"><a href="{{ appartement.get_absolute_url }}">{{appartement}}</a></li>
+      <ul>
+        <li>Address Field 1: {{ appartement.field_1 }}</li>
+        <li>Owner's Name: {{ appartement.name }}</li>
+        <li>Contact: {{ appartement.mobile_number }}</li>
+        <li>Number of sensors installed : <b>{{ appartement.sensor_set.all.count }}</b></li>
+      </ul>
+    {% endfor %}
+    </ol>
+  </div>
+  </div>
+</div>
+{% endblock %}
