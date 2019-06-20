@@ -60,7 +60,7 @@ class DataTestCase(TestCase):
         """
         c = Client()
         response = c.get("/chart",secure=True)
-        self.assertEqual(response.status_code,400)
+        self.assertEqual(response.status_code,404)
         #self.assertEqual(response.context["values"].count(),3)
 
 '''
