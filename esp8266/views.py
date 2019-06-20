@@ -5,7 +5,6 @@ from .models import Data,Sensor,Appartement,Building
 from django.utils import timezone
 from django.urls import reverse
 import json,collections
-import datetime
 from rest_framework import viewsets
 from esp8266.serializers import DataSerializer
 from esp8266.forms import DateForm,DataFilterForm
@@ -30,29 +29,6 @@ def store(request):
     return JsonResponse({'message':str(value)})
 
 
-def index(request):
-    values = Data.objects.all().order_by('date')
-    context = {"values": values}
-    return render(request, "esp8266/values.html", context)
-
-def chart(request):
-    '''
-    # Another way of implementing
-    today = datetime.date.today()
-    today_with_time = datetime.datetime(
-        year=today.year,
-        month=today.month,
-        day=today.day,
-        tzinfo = timezone.utc,
-    )
-    values = Data.objects.filter(date__gte=today_with_time-datetime.timedelta(seconds=60*60*5.5))
-    '''
-    values = Data.objects.filter(date__gte=datetime.date.today())
-    #When USE_TZ is True, fields are converted to the current time zone before filtering.
-    context = {"values": values}
-    return render(request, "esp8266/chart.html", context)
-
-
 class DataViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows data to be viewed or edited.
@@ -61,20 +37,17 @@ class DataViewSet(viewsets.ModelViewSet):
     serializer_class = DataSerializer
 
 
-class DataListView(generic.ListView):
-    model = Data
-    #paginate_by = 50
-
-
-def test(request):
+def graph_per_day(request,pk):
     if not request.GET:
         form = DateForm()
     else:
         form = DateForm(request.GET)
-    values = Data.objects.filter(date__date=form['date'].value())
-    return render(request, 'esp8266/test.html', {'form': form, 'values':values, 'count':len(values)})
+    sensor = Sensor.objects.get(pk=pk)
+    data = Data.objects.filter(sensor__exact=sensor)
+    values = data.filter(date__date=form['date'].value())
+    return render(request, 'esp8266/graph_per_day.html', {'form': form, 'values':values, 'count':len(values), "sensor":sensor})
 
-def test3(request):
+def graph_max_min(request,pk):
     """
     The filtered data based on form input with minimum and maximum of temp/humidity
     """
@@ -82,23 +55,25 @@ def test3(request):
         form = DataFilterForm()
     else:
         form = DataFilterForm(request.GET)
+    sensor = Sensor.objects.get(pk=pk)
+    datas = Data.objects.filter(sensor__exact=sensor)
     if form['filter'].value()=='mh':
-        values=Data.objects.filter(date__month=timezone.localdate().month)
+        values = datas.filter(date__month=timezone.localdate().month)
     elif form['filter'].value()=='yr':
-        values=Data.objects.filter(date__year=timezone.localdate().year)
+        values = datas.filter(date__year=timezone.localdate().year)
     else:
-        values=Data.objects.filter(date__week=timezone.localdate().isocalendar()[1])
+        values = datas.filter(date__week=timezone.localdate().isocalendar()[1])
     if form['reading'].value() == '1':
-        b={(x.date.date(),x.temperature) for x in values}
+        b={(timezone.localdate(x.date),x.temperature) for x in values}
     else:
-        b={(x.date.date(),x.humidity) for x in values}
+        b={(timezone.localdate(x.date),x.humidity) for x in values}
     b=sorted(list(b))
     max_values = (max(list(group)) for key, group in groupby(b,key=lambda x:x[0]))
     min_values = (min(list(group)) for key, group in groupby(b,key=lambda x:x[0]))
     combined_values = zip(max_values,min_values)
     reading=collections.namedtuple('Reading',['date','max_reading','min_reading'])
     values = [reading(x[0][0],x[0][1],x[1][1]) for x in combined_values]
-    return render(request,'esp8266/test3.html',{"form":form,"values":values})
+    return render(request,'esp8266/graph_max_min.html',{"form":form,"values":values,'sensor': sensor})
 
 
 class SensorDetailView(generic.DetailView):
@@ -113,5 +88,19 @@ class BuildingDetailView(generic.DetailView):
     model = Building
 
 
-class BuildingListView(generic.ListView):
-    model = Building
+def index(request):
+    buildings = Building.objects.all()
+    num_buildings = buildings.count()
+    num_appartements = Appartement.objects.all().count()
+    num_sensors = Sensor.objects.all().count()
+    num_datas = Data.objects.all().count()
+    num_visits = request.session.get('num_visits', 0)
+    request.session['num_visits'] = num_visits + 1
+    context = {"buildings":buildings,
+               "num_datas":num_datas,
+               "num_sensors":num_sensors,
+               "num_appartements":num_appartements,
+               "num_buildings":num_buildings,
+               "num_visits":num_visits,
+               }
+    return render(request,'index.html',context)

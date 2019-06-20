@@ -49,7 +49,7 @@ class Sensor(models.Model):
         )
     appartement = models.ForeignKey('Appartement', on_delete=models.SET_NULL, null=True)
     def __str__(self):
-        return f"sensor located at {self.description}"
+        return f"Sensor located at {self.description}"
 
     def get_absolute_url(self):
         """Return the url to access detail record for each Sensor"""

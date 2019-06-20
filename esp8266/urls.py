@@ -19,13 +19,10 @@ from . import views
 
 urlpatterns = [
     path('post', views.store, name = 'store'),
-    path('', views.index, name = "index"),
-    path('chart', views.chart, name = "chart"),
-    path('test2', views.DataListView.as_view(), name="test2"),
-    path('test', views.test, name="test"),
-    path('test3',views.test3,name="test3"),
-    path('sensor/<int:pk>', views.SensorDetailView.as_view(), name='sensor-detail'),
-    path('appartement/<int:pk>', views.AppartementDetailView.as_view(), name='appartement-detail'),
+    path("",views.index, name = "index"),
     path('building/<int:pk>', views.BuildingDetailView.as_view(), name='building-detail'),
-    path('buildings',views.BuildingListView.as_view(), name='building-list'),
-]
+    path('appartement/<int:pk>', views.AppartementDetailView.as_view(), name='appartement-detail'),
+    path('sensor/<int:pk>', views.SensorDetailView.as_view(), name='sensor-detail'),
+    path('sensor/<int:pk>/graph1', views.graph_per_day, name="graph_per_day"),
+    path('sensor/<int:pk>/graph2',views.graph_max_min,name="graph_max_min"),
+    ]

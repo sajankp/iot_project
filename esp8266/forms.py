@@ -27,9 +27,9 @@ class DataFilterForm(forms.Form):
         ('2',"Humidity"),
     ]
     TYPE_OF_FILTER=[
-        (week,"Week"),
-        (month,"Month"),
-        (year,"Year"),
+        (week,"This Week"),
+        (month,"This Month"),
+        (year,"This Year"),
     ]
     reading = forms.ChoiceField(label="Temperature or Humidity",
                                 choices=TYPE_OF_READING,
@@ -37,5 +37,5 @@ class DataFilterForm(forms.Form):
                                 )
     filter = forms.ChoiceField(label="Time Filter",
                               choices=TYPE_OF_FILTER,
-                              initial='wk'
+                              initial='mh'
                              )

@@ -17,13 +17,15 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 from esp8266 import views
+from django.views.generic import RedirectView
 
 router = routers.DefaultRouter()
 router.register(r'data', views.DataViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('esp8266.urls')),
+    path('iot/',include('esp8266.urls')),
+    path('',RedirectView.as_view(url='/iot/', permanent=True)),
     path('api/v1/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
