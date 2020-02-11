@@ -7,7 +7,7 @@ Automat==0.7.0
 channels==2.1.7
 constantly==15.1.0
 daphne==2.2.5
-Django==2.1.7
+Django==2.2.10
 djangorestframework==3.9.1
 hyperlink==18.0.0
 idna==2.8
