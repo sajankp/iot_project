@@ -10,7 +10,23 @@ from django.utils import timezone
 from esp8266 import config
 
 
-class Data(models.Model):
+class CommonBaseModel(models.Model):
+    id = models.AutoField(primary_key=True)
+    objects = models.manager
+
+    class Meta:
+        abstract = True
+
+
+class CommonLargeDataBaseModel(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    objects = models.manager
+
+    class Meta:
+        abstract = True
+
+
+class Data(CommonLargeDataBaseModel):
     date = models.DateTimeField(default=timezone.now)
     temperature = models.PositiveSmallIntegerField(validators=[MaxValueValidator(150)], default=0)
     humidity = models.PositiveSmallIntegerField(validators=[MaxValueValidator(150)], default=0)
@@ -36,7 +52,7 @@ class Data(models.Model):
         ordering = ['-date']
 
 
-class Sensor(models.Model):
+class Sensor(CommonLargeDataBaseModel):
     created_date = models.DateTimeField(auto_now_add=True)
     last_modified_date = models.DateTimeField(auto_now=True)
     key = models.UUIDField(
@@ -64,7 +80,7 @@ class Sensor(models.Model):
         ordering = ['-created_date']
 
 
-class Apartment(models.Model):
+class Apartment(CommonBaseModel):
     """represent many addresses within one building"""
     created_date = models.DateTimeField(auto_now_add=True)
     last_modified_date = models.DateTimeField(auto_now=True)
@@ -89,7 +105,7 @@ class Apartment(models.Model):
         ordering = ['building', 'field_1']
 
 
-class Building(models.Model):
+class Building(CommonBaseModel):
     created_date = models.DateTimeField(auto_now_add=True)
     last_modified_date = models.DateTimeField(auto_now=True)
     description = models.TextField(
