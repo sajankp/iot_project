@@ -42,7 +42,6 @@ class AppartementInline(admin.TabularInline):
 @admin.register(Building)
 class BuildingAdmin(admin.ModelAdmin):
     list_display = ['field_2','town','state','description']
-    fields = ['building_name','field_2',('town','state'),'description','pincode','latitude','longitude','landmark']
-    # fields = ["Name",("Town/City","State"),"Description"]
+    fields = ['building_name','field_2',('town','state'),'description','pin_code','latitude','longitude','landmark']
     list_filter = ["state"]
     inlines = [AppartementInline]

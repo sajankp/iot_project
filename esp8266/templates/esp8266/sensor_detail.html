@@ -5,8 +5,8 @@
 <div class="col-sm-11">
   <h2>Sensor: {{ sensor.description }}, {{sensor.is_outdoor|yesno:"Outdoor,Indoor"}}</h2>
 
-  <h4><a href="{{ sensor.appartement.get_absolute_url }}">Appartment: {{sensor.appartement}}</a></h4>
-  <h4><a href="{{ sensor.appartement.building.get_absolute_url }}">Building: {{sensor.appartement.building}}</a></h4>
+  <h4><a href="{{ sensor.apartement.get_absolute_url }}">Apartment: {{sensor.apartement}}</a></h4>
+  <h4><a href="{{ sensor.apartement.building.get_absolute_url }}">Building: {{sensor.apartement.building}}</a></h4>
   <h4><a href="{% url "graph_per_day" sensor.pk %}">Graph of Data from Any day</a></h4>
   <h4><a href="{% url "graph_max_min" sensor.pk %}">Graph of Maximum and Minimum recoded in various periods</a></h4>
 
