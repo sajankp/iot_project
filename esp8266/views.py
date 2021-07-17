@@ -1,34 +1,37 @@
-from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from .models import Data, Sensor, Apartment, Building
-from django.utils import timezone
-from django.urls import reverse
-import json
 import collections
-from rest_framework import viewsets
-from esp8266.serializers import DataSerializer
-from esp8266.forms import DateForm, DataFilterForm
-from django.views import generic
+import json
 from itertools import groupby
+
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.utils import timezone
+from django.views import generic
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import viewsets
+
+from esp8266.forms import DateForm, DataFilterForm
+from esp8266.serializers import DataSerializer
+from .models import Data, Sensor, Apartment, Building
+
+
 # Create your views here.
 
 
 @csrf_exempt
 def store(request):
-    recieved_json = json.loads(request.body)
+    received_json = json.loads(request.body)
     try:
-        sensor = Sensor.objects.filter(key__exact=recieved_json['secretkey'])[0]
+        sensor = Sensor.objects.filter(key__exact=received_json['secretkey'])[0]
     except:
         return JsonResponse({'message': "wrong key or sensor is not registered", 'time': 1000000})
-    if recieved_json['ERROR_IN_MEASUREMENT']:
+    if received_json['ERROR_IN_MEASUREMENT']:
         return JsonResponse({'message': "Error in value hence not recorded"})
-    if recieved_json['FIRST']:
+    if received_json['FIRST']:
         a = timezone.localtime()
         return JsonResponse({'time': (29 - a.minute % 30) * 60 + (90 - a.second),
-                            'message': "Reading will be recorded next time, now time is "+str(a)})
-    temp = recieved_json['temp']
-    humid = recieved_json['humidity']
+                             'message': "Reading will be recorded next time, now time is " + str(a)})
+    temp = received_json['temp']
+    humid = received_json['humidity']
     value = Data(temperature=temp, humidity=humid,
                  date=timezone.localtime(value=timezone.now()), sensor=sensor)
     value.save()
@@ -51,7 +54,8 @@ def graph_per_day(request, pk):
     sensor = Sensor.objects.get(pk=pk)
     data = Data.objects.filter(sensor__exact=sensor)
     values = data.filter(date__date=form['date'].value())
-    return render(request, 'esp8266/graph_per_day.html', {'form': form, 'values': values, 'count': len(values), "sensor": sensor})
+    return render(request, 'esp8266/graph_per_day.html',
+                  {'form': form, 'values': values, 'count': len(values), "sensor": sensor})
 
 
 def graph_max_min(request, pk):
