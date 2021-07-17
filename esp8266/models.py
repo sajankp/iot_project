@@ -51,7 +51,7 @@ class Sensor(models.Model):
         default=False,
         help_text="The location of sensor",
     )
-    appartement = models.ForeignKey('Appartement', on_delete=models.SET_NULL, null=True)
+    apartment = models.ForeignKey('Apartment', on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return f"Sensor located at {self.description}"
@@ -64,7 +64,7 @@ class Sensor(models.Model):
         ordering = ['-created_date']
 
 
-class Appartement(models.Model):
+class Apartment(models.Model):
     """represent many addresses within one building"""
     created_date = models.DateTimeField(auto_now_add=True)
     last_modified_date = models.DateTimeField(auto_now=True)
@@ -82,8 +82,8 @@ class Appartement(models.Model):
         return f'{self.field_1}'
 
     def get_absolute_url(self):
-        """Return the url to access detail record for each Appartement"""
-        return reverse('appartement-detail', args=[self.id])
+        """Return the url to access detail record for each Apartment"""
+        return reverse('apartment-detail', args=[self.id])
 
     class Meta:
         ordering = ['building', 'field_1']

@@ -14,16 +14,16 @@
 </ul>
 
   <div style="margin-top:20px">
-    <h3 style="margin-left:20px">Appartments</h3>
+    <h3 style="margin-left:20px">Apartments</h3>
     <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6">
     <ol>
-    {% for appartement in building.appartement_set.all %}
-      <li style="margin-left:20px"><a href="{{ appartement.get_absolute_url }}">{{appartement}}</a></li>
+    {% for apartment in building.apartment_set.all %}
+      <li style="margin-left:20px"><a href="{{ apartment.get_absolute_url }}">{{apartment}}</a></li>
       <ul>
-        <li>Address Field 1: {{ appartement.field_1 }}</li>
-        <li>Owner's Name: {{ appartement.name }}</li>
-        <li>Contact: {{ appartement.mobile_number }}</li>
-        <li>Number of sensors installed : <b>{{ appartement.sensor_set.all.count }}</b></li>
+        <li>Address Field 1: {{ apartment.field_1 }}</li>
+        <li>Owner's Name: {{ apartment.name }}</li>
+        <li>Contact: {{ apartment.mobile_number }}</li>
+        <li>Number of sensors installed : <b>{{ apartment.sensor_set.all.count }}</b></li>
       </ul>
     {% endfor %}
     </ol>

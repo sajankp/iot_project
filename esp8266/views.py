@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from .models import Data, Sensor, Appartement, Building
+from .models import Data, Sensor, Apartment, Building
 from django.utils import timezone
 from django.urls import reverse
 import json
@@ -87,8 +87,8 @@ class SensorDetailView(generic.DetailView):
     model = Sensor
 
 
-class AppartementDetailView(generic.DetailView):
-    model = Appartement
+class ApartmentDetailView(generic.DetailView):
+    model = Apartment
 
 
 class BuildingDetailView(generic.DetailView):
@@ -98,7 +98,7 @@ class BuildingDetailView(generic.DetailView):
 def index(request):
     buildings = Building.objects.all()
     num_buildings = buildings.count()
-    num_appartements = Appartement.objects.all().count()
+    num_apartments = Apartment.objects.all().count()
     num_sensors = Sensor.objects.all().count()
     num_datas = Data.objects.all().count()
     num_visits = request.session.get('num_visits', 0)
@@ -106,7 +106,7 @@ def index(request):
     context = {"buildings": buildings,
                "num_datas": num_datas,
                "num_sensors": num_sensors,
-               "num_appartements": num_appartements,
+               "num_apartments": num_apartments,
                "num_buildings": num_buildings,
                "num_visits": num_visits,
                }
