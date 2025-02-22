@@ -6,19 +6,22 @@ from channels.testing import WebsocketCommunicator
 from esp8266.consumers import DataConsumer
 import pytest, random, re
 
+
 class DataTestCase(TestCase):
 
     def setUp(self):
-        a0 = Data.objects.create(temperature = 33,humidity=75,date = datetime.datetime(2019, 2, 26, 6, 11, 40, tzinfo=timezone.utc))
-        a1 = Data.objects.create(temperature = 32,humidity=75,date = timezone.now() - datetime.timedelta(seconds = 60))
-        a2 = Data.objects.create(temperature = 33,humidity=80,date = timezone.now() - datetime.timedelta(seconds = 60 * 3))
-        a3 = Data.objects.create(temperature = 32,humidity=80,date = timezone.now() - datetime.timedelta(seconds = 60 * 4))
+        a0 = Data.objects.create(
+            temperature=33, humidity=75, date=datetime.datetime(2019, 2, 26, 6, 11, 40, tzinfo=timezone.utc)
+        )
+        a1 = Data.objects.create(temperature=32, humidity=75, date=timezone.now() - datetime.timedelta(seconds=60))
+        a2 = Data.objects.create(temperature=33, humidity=80, date=timezone.now() - datetime.timedelta(seconds=60 * 3))
+        a3 = Data.objects.create(temperature=32, humidity=80, date=timezone.now() - datetime.timedelta(seconds=60 * 4))
 
     def test_value_zero_count(self):
         """
         Count of objects with temperature 32 which is to be 2
         """
-        a = Data.objects.filter(temperature = 32)
+        a = Data.objects.filter(temperature=32)
         self.assertEqual(a.count(), 2)
 
     def test_total_count(self):
@@ -35,7 +38,7 @@ class DataTestCase(TestCase):
         c = Client()
         response = c.get("/")
         self.assertEqual(response.status_code, 301)
-        #self.assertEqual(response.context["values"].count(), 4)
+        # self.assertEqual(response.context["values"].count(), 4)
 
     def test_chart(self):
         """
@@ -44,7 +47,8 @@ class DataTestCase(TestCase):
         c = Client()
         response = c.get("/chart")
         self.assertEqual(response.status_code, 404)
-        #self.assertEqual(response.context["values"].count(), 3)
+        # self.assertEqual(response.context["values"].count(), 3)
+
 
 '''
 class TestWebSocket:

@@ -1,8 +1,5 @@
 django==3.2.5
-channels~=3.0.4
-djangorestframework~=3.12.4
-pytest~=6.2.4
-django-environ~=0.4.5
-#pytest-asyncio~=0.15.0
-#pytest-django==3.4.8
-#websockets==9.1
+channels==3.0.5
+djangorestframework==3.12.4
+pytest==6.2.5
+django-environ==0.4.5

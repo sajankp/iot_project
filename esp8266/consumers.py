@@ -3,6 +3,7 @@ import json
 from django.utils import timezone
 from .models import Data
 
+
 class DataConsumer(WebsocketConsumer):
     def connect(self):
         self.accept()
@@ -12,9 +13,7 @@ class DataConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        a = text_data_json['temp']
-        value = Data(value = a,date = timezone.localtime(timezone.now()))
+        a = text_data_json["temp"]
+        value = Data(value=a, date=timezone.localtime(timezone.now()))
         value.save()
-        self.send(text_data = json.dumps({
-            'message': f'Done and recieved {value.value} at {value.date}'
-        }))
+        self.send(text_data=json.dumps({"message": f"Done and recieved {value.value} at {value.date}"}))

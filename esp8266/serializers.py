@@ -5,4 +5,4 @@ from rest_framework import serializers
 class DataSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Data
-        fields = ('temperature', 'date', 'month', 'humidity')
+        fields = ("temperature", "date", "month", "humidity")
