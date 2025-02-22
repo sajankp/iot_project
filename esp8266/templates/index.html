@@ -7,7 +7,7 @@
   <p>This website have the following record count:</p>
   <ul>
     <li><strong>Buildings:</strong> {{ num_buildings }}</li>
-    <li><strong>Appartments:</strong> {{ num_appartements }}</li>
+    <li><strong>Apartments:</strong> {{ num_apartments }}</li>
     <li><strong>Sensors:</strong> {{ num_sensors }}</li>
     <li><strong>Readings recorded:</strong> {{ num_datas }}</li>
   </ul>
@@ -24,7 +24,7 @@
             <li>Town: {{ building.town }}</li>
             <li>Nearest Landmark: {{ building.landmark }}</li>
             <li>State Code: {{ building.state }}</li>
-            <li>Pincode: {{ building.pincode }}</li>
+            <li>Pincode: {{ building.pin_code }}</li>
           </ul>
       {% endfor %}
       </ol>
